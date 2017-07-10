@@ -13,7 +13,6 @@ namespace AlwaysOnTop.Classes
 		const char Delim = '+';
 
 		int RaL, UHK, CT, UPM, DBN, CUaS, UFE, UF;
-
 		enum UpdateFrequency
 		{
 			None = 0,
@@ -21,10 +20,11 @@ namespace AlwaysOnTop.Classes
 			Week = 7,
 			Month = 30
 		}
-		
+
 		public FormSettings()
 		{
             InitializeComponent();
+            addEvents(this.Controls);
 		}
 
 		void FormSettings_Load(object sender, EventArgs e)
@@ -92,41 +92,6 @@ namespace AlwaysOnTop.Classes
 			}
 
 			btnApply.Enabled = false; // Make this one last so a potential change from registry settings doesn't enable it.
-		}
-
-		private void chkRunAtLogin_CheckedChanged(object sender, EventArgs e)
-		{
-			btnApply.Enabled = true;
-		}
-
-		private void chkTitleContext_CheckedChanged(object sender, EventArgs e)
-		{
-			btnApply.Enabled = true;
-		}
-
-		private void chkHotKey_CheckedChanged(object sender, EventArgs e)
-		{
-			btnApply.Enabled = true;
-		}
-
-		private void chkPermWindows_CheckedChanged(object sender, EventArgs e)
-		{
-			btnApply.Enabled = true;
-		}
-
-        private void chkUpdateStart_CheckedChanged(object sender, EventArgs e)
-        {
-            btnApply.Enabled = true;
-        }
-
-        private void chkUpdateFreq_CheckedChanged(object sender, EventArgs e)
-        {
-            btnApply.Enabled = true;
-        }
-
-        private void chkDisableBalloonNotify_CheckedChanged(object sender, EventArgs e)
-		{
-			btnApply.Enabled = true;
 		}
 
 		private void btnSelectWindows_Click(object sender, EventArgs e)
@@ -346,7 +311,22 @@ namespace AlwaysOnTop.Classes
 		{
 			btnApply.Enabled = true;
 			var setHotKey = new FormSetHotkey();
+            setHotKey.Owner = this;
 			setHotKey.ShowDialog();
 		}
+
+        private void addEvents(Control.ControlCollection controls)
+        {
+            foreach(Control c in controls)
+            {
+                if (c is CheckBox)
+                    ((CheckBox)c).CheckedChanged += new EventHandler(EnableApplyButton);
+            }
+        }
+
+        private void EnableApplyButton(object obj, EventArgs e)
+        {
+            btnApply.Enabled = true;
+        }
 	}
 }

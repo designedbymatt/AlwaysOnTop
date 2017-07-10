@@ -21,8 +21,9 @@ namespace AlwaysOnTop
 		}
 	}
 
-	public class MyCustomApplicationContext : ApplicationContext
+	public class AlwaysOnTopApplicationContext : ApplicationContext
 	{
+		#region icon and cursor dependencies
 		/*********** ICON DEPENDENCIES *********************/
 		[DllImport("user32.dll")]
 		static extern bool SetSystemCursor(IntPtr hcur, uint id);
@@ -40,8 +41,8 @@ namespace AlwaysOnTop
 		public static uint CROSS = 32515;
 		public static uint NORMAL = 32512;
 		public static uint IBEAM = 32513;
-		/********** END ICON DEPENDENCIES *******************/
-		// declare the trayicon
+		#endregion
+
 
 		public string skey;
 		public Keys kMod, key;
@@ -52,7 +53,7 @@ namespace AlwaysOnTop
 		int RaL, UHK, CT, UPM, DBN, CUaS, UFE, UF;
 		NotifyIcon trayIcon = new NotifyIcon();
 
-		public MyCustomApplicationContext(string[] args)
+		public AlwaysOnTopApplicationContext(string[] args)
 		{
 			var _assembly = Assembly.GetExecutingAssembly();
 			var iconStream = _assembly.GetManifestResourceStream("AlwaysOnTop.icon.ico");
@@ -190,7 +191,7 @@ namespace AlwaysOnTop
 			}
 			finally
 			{
-				RevertCursors();
+				RevertCursor();
 			}
 		}
 
@@ -204,7 +205,7 @@ namespace AlwaysOnTop
 			}
 		}
 
-		public static void RevertCursors()
+		public static void RevertCursor()
 		{
 			// Revert because otherwise it will stay this way
 			SystemParametersInfo(0x0057, 0, null, 0);
