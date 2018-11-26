@@ -87,7 +87,7 @@ namespace AlwaysOnTop
 			//{ MessageBox.Show(ex.Message); }
 
 
-			if (CUaS == 1) { Methods.GetReleases(); }
+
 			/*if (UFE == 1 && UF != 0) { }  ***********************************************************************/
 
 			regSettings.Close();

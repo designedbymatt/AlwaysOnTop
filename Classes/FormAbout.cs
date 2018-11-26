@@ -25,12 +25,12 @@ namespace AlwaysOnTop.Classes
 
 		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			System.Diagnostics.Process.Start("https://github.com/jparnell8839/AlwaysOnTop");
+			//System.Diagnostics.Process.Start("https://github.com/jparnell8839/AlwaysOnTop");
 		}
 
         private void btnCheckUpdate_Click(object sender, EventArgs e)
         {
-            Methods.GetReleases();
+            //Methods.GetReleases();
         }
     }
 }
