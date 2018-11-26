@@ -94,7 +94,6 @@
     <Compile Include="Classes\FormSetHotkey.Designer.cs">
       <DependentUpon>FormSetHotkey.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\globalKeyboardHook.cs" />
     <Compile Include="Classes\Methods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
