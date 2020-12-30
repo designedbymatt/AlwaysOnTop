@@ -147,18 +147,9 @@ namespace AlwaysOnTop
 			{
 				trayIcon.ShowBalloonTip(500, "AlwaysOnTop", "Running AlwaysOnTop on " + winTitle, ToolTipIcon.Info);
 			}
-
-			var isOnTop = winTitle?.EndsWith(" - AlwaysOnTop") ?? false; 
-			if (isOnTop)
-			{
-				// Disable the AlwaysOnTop
-				Methods.AoT_off(winTitle);
-			}
-			else
-			{
-				// Enable the AlwaysOnTop
-				Methods.AoT_on(winTitle);
-			}
+			
+			Methods.AoT_toggle(winTitle);
+			
 			e.Handled = true;
 		}
 
@@ -176,23 +167,13 @@ namespace AlwaysOnTop
 			try
 			{
 				var winTitle = await Methods.GetWindowTitle();
-
-				var isOnTop = winTitle?.EndsWith(" - AlwaysOnTop") ?? false; 
-				if (isOnTop)
-				{
-					// Disable the AlwaysOnTop
-					Methods.AoT_off(winTitle);
-				}
-				else
-				{
-					// Enable the AlwaysOnTop
-					Methods.AoT_on(winTitle);
-				}
+                Methods.AoT_toggle(winTitle);
 			}
 			finally
 			{
 				RevertCursor();
 			}
+
 		}
 
 		static void ChangeCursors()
