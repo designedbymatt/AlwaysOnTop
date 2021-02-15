@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Microsoft.Win32;
 using System.Windows.Forms;
-using Octokit;
 using System.Threading.Tasks;
 
 namespace AlwaysOnTop.Classes
@@ -155,43 +154,7 @@ namespace AlwaysOnTop.Classes
 			return temp;
 		}
 
-        public static void GetReleases()
-        {
-            try
-            {
-                var client = new GitHubClient(new ProductHeaderValue("AlwaysOnTop-Updater"));
-                var releases = client.Repository.Release.GetAll("jparnell8839", "AlwaysOnTop").Result;
-                var latest = releases[0];
 
-	            if (latest.TagName != AlwaysOnTop.version)
-                {
-                    var downloadUpdate = MessageBox.Show("You have " + AlwaysOnTop.version + " installed." + Environment.NewLine
-                        + "The latest release is " + latest.TagName + Environment.NewLine
-                        + Environment.NewLine
-                        + "Would you like to download the newest update?",
-                        "Update Check",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
-
-                    if(downloadUpdate == DialogResult.Yes)
-                    {
-                        //MessageBox.Show(latest);
-                        var update = new FormUpdate(latest);
-                        update.ShowDialog();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("You are up to date!","Update Check",MessageBoxButtons.OK);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-        }
 
         /*public static void GetReleases(int updateFreq, DateTime lastCheck)
         {

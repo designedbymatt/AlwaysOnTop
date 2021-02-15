@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using Utilities;
+
 using System.ComponentModel;
 
 namespace AlwaysOnTop
@@ -45,7 +45,7 @@ namespace AlwaysOnTop
 
 		public string skey;
 		public Keys kMod, key;
-		globalKeyboardHook gkh;
+  
 
 		string AoTPath = Application.ExecutablePath;
 		string AoTBuild, IP, HK, PW;
@@ -66,7 +66,7 @@ namespace AlwaysOnTop
 			}
 
 			var regSettings = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\AlwaysOnTop", true);
-				
+
 			AoTBuild = Methods.TryRegString(regSettings, "Build", AlwaysOnTop.build, true);
 			IP = Methods.TryRegString(regSettings, "Installation Path", AoTPath,true);
 			RaL = Methods.TryRegInt(regSettings, "Run at Login", 0,false);
@@ -87,7 +87,7 @@ namespace AlwaysOnTop
 			//{ MessageBox.Show(ex.Message); }
 
 
-			if (CUaS == 1) { Methods.GetReleases(); }
+
 			/*if (UFE == 1 && UF != 0) { }  ***********************************************************************/
 
 			regSettings.Close();
@@ -114,52 +114,6 @@ namespace AlwaysOnTop
 				}
 
 
-				if (CT == 1) { /* call method to enabled titlebar context menu*/ }
-				if (UHK == 1 && HK != "")
-				{
-					var delim = "+";
-					var sHK = HK.Split(new string[] { delim }, StringSplitOptions.None);
-					var modifier = sHK[0];
-					skey = sHK[1];
-					kMod = new Keys();
-
-					switch (modifier.ToLower())
-					{
-						case "ctrl":
-							kMod = Keys.Control;
-							break;
-						case "alt":
-							kMod = Keys.Alt;
-							break;
-						case "shift":
-							kMod = Keys.Shift;
-							break;
-						case "winkey":
-							kMod = Keys.LWin;
-							break;
-						default:
-							kMod = Keys.None;
-							break;
-					}
-
-					var keysConverter = TypeDescriptor.GetConverter(typeof(Keys));
-					key = (Keys)keysConverter.ConvertFromString(skey);
-					GKH = new globalKeyboardHook();
-					GKH.HookedKeys.Add(kMod);
-					GKH.HookedKeys.Add(key);
-
-					GKH.KeyUp += new KeyEventHandler(keyup_hook);
-					GKH.hook();
-
-					if (DBN != 1)
-					{
-						TrayIcon.ShowBalloonTip(500, "Settings", kMod + "+" + key + " Hotkey registered", ToolTipIcon.Info);
-					}
-				}
-				else
-				{
-					gkh = new globalKeyboardHook();
-				}
 				if (UPM == 1) { /* call method to enabled titlebar context menu*/ }
 
 			}
@@ -178,11 +132,7 @@ namespace AlwaysOnTop
 			set { trayIcon = value; }
 		}
 
-		globalKeyboardHook GKH
-		{
-			get { return gkh; }
-			set { gkh = value; }
-		}
+
 
 		async void keyup_hook(object sender, KeyEventArgs e)
 		{
@@ -281,7 +231,6 @@ namespace AlwaysOnTop
 		void OnApplicationExit(object sender, EventArgs e)
 		{
 			TrayIcon.Visible = false;
-			GKH.unhook();
 		}
 
 		void Exit(object sender, EventArgs e)
