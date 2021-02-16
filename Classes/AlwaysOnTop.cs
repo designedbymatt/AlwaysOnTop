@@ -12,8 +12,8 @@ namespace AlwaysOnTop
 {
 	public partial class AlwaysOnTop : Form
 	{
-		public const string version = "0.6.1";
-		public const string build = "170118.2106";
+		public static string version { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); } }
+		public const string build = "201229.1840";
 		
 		public AlwaysOnTop()
 		{
@@ -147,18 +147,9 @@ namespace AlwaysOnTop
 			{
 				trayIcon.ShowBalloonTip(500, "AlwaysOnTop", "Running AlwaysOnTop on " + winTitle, ToolTipIcon.Info);
 			}
-
-			var isOnTop = winTitle?.EndsWith(" - AlwaysOnTop") ?? false; 
-			if (isOnTop)
-			{
-				// Disable the AlwaysOnTop
-				Methods.AoT_off(winTitle);
-			}
-			else
-			{
-				// Enable the AlwaysOnTop
-				Methods.AoT_on(winTitle);
-			}
+			
+			Methods.AoT_toggle(winTitle);
+			
 			e.Handled = true;
 		}
 
@@ -176,23 +167,13 @@ namespace AlwaysOnTop
 			try
 			{
 				var winTitle = await Methods.GetWindowTitle();
-
-				var isOnTop = winTitle?.EndsWith(" - AlwaysOnTop") ?? false; 
-				if (isOnTop)
-				{
-					// Disable the AlwaysOnTop
-					Methods.AoT_off(winTitle);
-				}
-				else
-				{
-					// Enable the AlwaysOnTop
-					Methods.AoT_on(winTitle);
-				}
+                Methods.AoT_toggle(winTitle);
 			}
 			finally
 			{
 				RevertCursor();
 			}
+
 		}
 
 		static void ChangeCursors()
