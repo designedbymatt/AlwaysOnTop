@@ -121,96 +121,117 @@ namespace AlwaysOnTop.Classes
         {
             var val = (long)GetWindowLongPtr(handle, (int)GWL.GWL_EXSTYLE) & WS_EX_TOPMOST;
             return val != 0;
-		}
+	}
 
-		public static void AoT_on(string title)
+	/*public static void AoT_on(string title)
+	{
+		var processes = Process.GetProcesses(".");
+		foreach (var process in processes)
 		{
-			var processes = Process.GetProcesses(".");
-			foreach (var process in processes)
+			var mWinTitle = process.MainWindowTitle.ToString();
+			if (mWinTitle == title)
 			{
-				var mWinTitle = process.MainWindowTitle.ToString();
-				if (mWinTitle == title)
+				var handle = process.MainWindowHandle;
+				if (handle != IntPtr.Zero)
 				{
-					var handle = process.MainWindowHandle;
-					if (handle != IntPtr.Zero)
-					{
-						SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-						var newTitle = title + " - AlwaysOnTop";
-						SetWindowText(handle, newTitle);
-					}
+					SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+					var newTitle = title + " - AlwaysOnTop";
+					SetWindowText(handle, newTitle);
 				}
 			}
 		}
+	}
 
-		public static void AoT_off(string title)
+	public static void AoT_off(string title)
+	{
+		var processes = Process.GetProcesses(".");
+		foreach (var process in processes)
 		{
-			var processes = Process.GetProcesses(".");
-			foreach (var process in processes)
+			var mWinTitle = process.MainWindowTitle.ToString();
+			if ( mWinTitle == title)
 			{
-				var mWinTitle = process.MainWindowTitle.ToString();
-				if ( mWinTitle == title)
+				var handle = process.MainWindowHandle;
+				if (handle != IntPtr.Zero)
 				{
-					var handle = process.MainWindowHandle;
-					if (handle != IntPtr.Zero)
-					{
-						SetWindowPos(handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-						var newTitle = title.Substring(0,title.Length - 14);
-						SetWindowText(handle, newTitle);
-					}
+					SetWindowPos(handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+					var newTitle = title.Substring(0,title.Length - 14);
+					SetWindowText(handle, newTitle);
 				}
 			}
 		}
+	}*/
 
-		public static string TryRegString(RegistryKey rk, string keyName, string value, bool overwrite)
+	public static string TryRegString(RegistryKey rk, string keyName, string value, bool overwrite)
+	{
+		string temp;
+
+		/*try
 		{
-			string temp;
-
-			try
-			{
-                temp = (string)rk.GetValue(keyName);
-			}
+			temp = (string)rk.GetValue(keyName);
+	        }
 			catch
-			{
-                rk.SetValue(keyName, value, RegistryValueKind.String);
-                temp = (string)rk.GetValue(keyName);
-			}
-			if (overwrite == true)
-			{
-				if (temp != value)
-				{
-					rk.SetValue(keyName, value, RegistryValueKind.String);
-					temp = (string)rk.GetValue(keyName);
-				}
-			}
+		{
+                	rk.SetValue(keyName, value, RegistryValueKind.String);
+                	temp = (string)rk.GetValue(keyName);
+		}*/
 
-			return temp;
+		if (rk.GetValue(keyName) != null)
+        	{
+			temp = (string)rk.GetValue(keyName);
+		}
+         	else
+            	{
+			rk.SetValue(keyName, value, RegistryValueKind.String);
+			temp = (string)rk.GetValue(keyName);
 		}
 
-		public static int TryRegInt(RegistryKey rk, string keyName, int value, bool overwrite)
+		if (overwrite == true)
 		{
-			int temp;
-
-			try
+			if (temp != value)
 			{
-				temp = (int)rk.GetValue(keyName);
+				rk.SetValue(keyName, value, RegistryValueKind.String);
+				temp = (string)rk.GetValue(keyName);
 			}
-			catch
+		}
+
+		return temp;
+	}
+
+	public static int TryRegInt(RegistryKey rk, string keyName, int value, bool overwrite)
+	{
+		int temp;
+
+		/*try
+		{
+			temp = (int)rk.GetValue(keyName);
+		}
+		catch
+		{
+			rk.SetValue(keyName, value, RegistryValueKind.DWord);
+			temp = (int)rk.GetValue(keyName);
+		}*/
+		
+		if (rk.GetValue(keyName) != null)
+		{
+			temp = (int)rk.GetValue(keyName);
+		}
+            	else
+            	{
+			rk.SetValue(keyName, value, RegistryValueKind.DWord);
+			temp = (int)rk.GetValue(keyName);
+		}
+
+		if (overwrite == true)
+		{
+			if (temp != value)
 			{
 				rk.SetValue(keyName, value, RegistryValueKind.DWord);
 				temp = (int)rk.GetValue(keyName);
 			}
-
-			if(overwrite == true)
-			{
-				if (temp != value)
-				{
-					rk.SetValue(keyName, value, RegistryValueKind.DWord);
-					temp = (int)rk.GetValue(keyName);
-				}
-			}
-			
-			return temp;
 		}
+			
+		return temp;
+	}
 
         /*public static void GetReleases(int updateFreq, DateTime lastCheck)
         {
